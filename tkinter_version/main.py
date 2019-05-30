@@ -11,7 +11,43 @@ WIDTH = 800
 HEIGHT= 640
 # Czy mozna rozszerzac
 RESIZABLE = 0
+class Simulation:
+    def __init__(self):
+        # Lista wszystkich czasteczek
+        self.particles = []
+        self.create_window()
+        self.window.mainloop()
 
+
+    def create_window(self):
+        # Tworzy nowe okno klasy Tk
+        self.window = tk.Tk()
+        # Ustawia nazwe okienka
+        self.window.title("Projekt Fizyka")
+        # Ustalenie wymiaru okienka za pomoca stringa "szerokoscxdlugosc"
+        self.window.geometry(str(WIDTH) + "x" + str(HEIGHT))
+        # Zabrania uzytkownikowi rozszerzania okna recznie
+        self.window.resizable(RESIZABLE, RESIZABLE)
+        # Utworzenie prostego napisu
+        text = ttk.Label(self.window, text="Symulacja", width=10)
+        # Umieszcza napis w oknie
+        text.pack()
+        # Utworzenie miejsca do rysowania
+        self.canvas = Canvas(self.window, width=WIDTH - 20, height=HEIGHT - 80, bg="#4bf2a7", borderwidth=2, relief="ridge")
+        # Umieszczenia miejsca w oknie
+        self.canvas.pack()
+        start = ttk.Button(text="Twórz",
+                           command=lambda: self.button_click())
+        start.pack(side="right", padx=50)
+        text_ilosc = ttk.Label(self.window, text="Ilość cząsteczek:")
+        text_ilosc.pack(side="left", padx=50)
+        # Entry to pole do wpisywania
+        number_input = ttk.Entry(self.window)
+        number_input.pack(side="left")
+        number_input.insert(0, "10")
+
+    def button_click(self):
+        print("Something")
 
 def create_random(particles, window,canvas):
      particles.append(Ball(random.randrange(0, WIDTH-20), random.randrange(0, HEIGHT-80), 5, random.randrange(-5, 5), random.randrange(-5, 5),canvas))
@@ -38,37 +74,7 @@ def simulation_start(number_of_particles, window, canvas, particles):
         particles[i].move_ball()
 
 def main():
-    hasStarted = False
-    # Lista wszystkich czasteczek
-    particles = []
-    # Tworzy nowe okno klasy Tk
-    window = tk.Tk()
-    # Ustawia nazwe okienka
-    window.title("Projekt Fizyka")
-    # Ustalenie wymiaru okienka za pomoca stringa "szerokoscxdlugosc"
-    window.geometry(str(WIDTH) + "x" + str(HEIGHT))
-    # Zabrania uzytkownikowi rozszerzania okna recznie
-    window.resizable(RESIZABLE, RESIZABLE)
-    # Utworzenie prostego napisu
-    text = ttk.Label(window, text = "Symulacja", width = 10)
-    # Umieszcza napis w oknie
-    text.pack()
-    # Utworzenie miejsca do rysowania
-    canvas = Canvas(window, width = WIDTH-20, height = HEIGHT-80, bg="#4bf2a7", borderwidth = 2, relief="ridge")
-    # Umieszczenia miejsca w oknie
-    canvas.pack()
-    # Stworzenie przycisku, po ktorego kliknieciu wywolywana jest funkcja simulation_start
-    # i jako argument jest przekazywana ilosc czasteczek
-    # zmienna command nie potrafi sama wywolac funkcji z parametrami, wiec trzeba wykorzystywac lambde
-    start = ttk.Button(text = "Twórz", command = lambda: simulation_start(number_input.get(), window, canvas, particles))
-    start.pack(side = "right", padx = 50)
-    text_ilosc = ttk.Label(window, text = "Ilość cząsteczek:")
-    text_ilosc.pack(side = "left", padx = 50)
-    # Entry to pole do wpisywania
-    number_input = ttk.Entry(window)
-    number_input.pack(side = "left")
-    number_input.insert(0, "10")
-    window.mainloop()
+    simulation = Simulation()
 
 if __name__ == "__main__":
     main()

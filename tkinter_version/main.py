@@ -2,16 +2,27 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import Canvas
 from tkinter import messagebox
+from Ball import *
 import random
 
-# Szerokosc okna
+#1 Szerokosc okna
 WIDTH = 800
 # Wysokosc okna
 HEIGHT= 640
 # Czy mozna rozszerzac
 RESIZABLE = 0
 
-def simulation_start(number_of_particles, window, canvas, czasteczka_img):
+
+def create_random(particles, window,canvas):
+     particles.append(Ball(random.randrange(0, WIDTH-20), random.randrange(0, HEIGHT-80), 5, random.randrange(-5, 5), random.randrange(-5, 5),canvas))
+
+def redraw(window,canvas,particles):
+    print("Tada")
+    for particle  in particles:
+        particle.draw(window,canvas)
+
+
+def simulation_start(number_of_particles, window, canvas, particles):
     # Sprawdza czy uzytkownik podal odpowiednia wartosc jako ilosc czasteczek
     try:
         number_of_particles = int(number_of_particles)
@@ -21,11 +32,15 @@ def simulation_start(number_of_particles, window, canvas, czasteczka_img):
         window.destroy()
     # Na razie tylko wyswietla, to trzeba bedzie zastapic tworzeniem obiektow danej klasy
     for i in range(number_of_particles):
-        x_pos = random.randrange(0, WIDTH-20)
-        y_pos = random.randrange(0, HEIGHT-80)
-        canvas.create_image(x_pos, y_pos, image = czasteczka_img)
-        
+        temp1 = random.randrange(0, 1000)
+        temp2 = random.randrange(0, 1000)
+        particles.append(Ball2(canvas,temp1,temp2,temp1+10,temp2+10))
+        particles[i].move_ball()
+
 def main():
+    hasStarted = False
+    # Lista wszystkich czasteczek
+    particles = []
     # Tworzy nowe okno klasy Tk
     window = tk.Tk()
     # Ustawia nazwe okienka
@@ -42,14 +57,10 @@ def main():
     canvas = Canvas(window, width = WIDTH-20, height = HEIGHT-80, bg="#4bf2a7", borderwidth = 2, relief="ridge")
     # Umieszczenia miejsca w oknie
     canvas.pack()
-    # Wczytuje obrazek czasteczki
-    czasteczka_img = tk.PhotoImage(file = "czasteczka.png")
-    # Wyswietla obrazek
-    #canvas.create_image(20, 20, image = czasteczka_img)
     # Stworzenie przycisku, po ktorego kliknieciu wywolywana jest funkcja simulation_start
     # i jako argument jest przekazywana ilosc czasteczek
     # zmienna command nie potrafi sama wywolac funkcji z parametrami, wiec trzeba wykorzystywac lambde
-    start = ttk.Button(text = "Twórz", command = lambda: simulation_start(number_input.get(), window, canvas, czasteczka_img))
+    start = ttk.Button(text = "Twórz", command = lambda: simulation_start(number_input.get(), window, canvas, particles))
     start.pack(side = "right", padx = 50)
     text_ilosc = ttk.Label(window, text = "Ilość cząsteczek:")
     text_ilosc.pack(side = "left", padx = 50)
@@ -57,6 +68,7 @@ def main():
     number_input = ttk.Entry(window)
     number_input.pack(side = "left")
     number_input.insert(0, "10")
+    window.mainloop()
 
 if __name__ == "__main__":
     main()

@@ -40,9 +40,12 @@ class Simulation:
         add = ttk.Button(text="Dodaj",
                            command=lambda: self.add_click(number_input.get()))
         add.pack(side="right", padx=50)
-        start = ttk.Button(text="Start/Reset",
+        start = ttk.Button(text="Start/Stop",
                            command=lambda: self.start_click())
         start.pack(side="right", padx=50)
+        reset = ttk.Button(text="Reset",
+                           command=lambda: self.reset_click())
+        reset.pack(side="right", padx=50)
         text_ilosc = ttk.Label(self.window, text="Ilość cząsteczek:")
         text_ilosc.pack(side="left", padx=50)
         # Entry to pole do wpisywania
@@ -63,6 +66,13 @@ class Simulation:
 
         elif self.running == 1:
             self.running = 0
+
+    def reset_click(self):
+        print("Reset clicked")
+        self.running=0
+        self.particles.clear()
+        self.window.destroy()
+        self.create_window()
 
     def add_new_particles(self,number):
         try:

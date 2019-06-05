@@ -16,4 +16,3 @@ class Ball2:
         deltax = random.randint(-5,5)
         deltay = random.randint(-5,5)
         self.canvas.move(self.ball, deltax, deltay)
-

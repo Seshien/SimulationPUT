@@ -8,7 +8,13 @@ import random
 #1 Szerokosc okna
 WIDTH = 800
 # Wysokosc okna
-HEIGHT= 640
+HEIGHT = 640
+
+#1 Szerokosc okna
+WIDTHMAP = 780
+# Wysokosc okna
+HEIGHTMAP = 560
+
 # Czy mozna rozszerzac
 RESIZABLE = 0
 
@@ -34,7 +40,7 @@ class Simulation:
         # Umieszcza napis w oknie
         text.pack()
         # Utworzenie miejsca do rysowania
-        self.canvas = Canvas(self.window, width=WIDTH - 20, height=HEIGHT - 80, bg="#4bf2a7", borderwidth=2, relief="ridge")
+        self.canvas = Canvas(self.window, width=WIDTHMAP, height=HEIGHTMAP, bg="#4bf2a7", borderwidth=2, relief="ridge")
         # Umieszczenia miejsca w oknie
         self.canvas.pack()
         add = ttk.Button(text="Dodaj",

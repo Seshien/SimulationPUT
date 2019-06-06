@@ -102,13 +102,22 @@ class Simulation:
                 for j in range(i+1, len(self.particles)):
                     if self.particles[i].check_coll(self.particles[j]):
                         self.have_collided(i, j)
-    
+
+    def check_collision(self,i):
+            for j in range(i+1, len(self.particles)):
+                    if self.particles[i].check_coll(self.particles[j]):
+                        return j
+            return -1
+
     def refresh(self):
-        self.canvas.after(50, self.refresh)
-        self.check_collisions()
         if self.running==1:
-            for ball in self.particles:
-                ball.move_ball()
+            for i in range(len(self.particles)):
+                j = self.check_collision(i)
+                if j ==- 1:
+                    self.particles[i].move_ball()
+                else:
+                    self.have_collided(i, j)
+        self.canvas.after(10, self.refresh)
 
     # Tu trzeba napisac kolidowanie
     def have_collided(self, i, j):

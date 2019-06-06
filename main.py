@@ -96,8 +96,16 @@ class Simulation:
     def return_particles(self):
         return self.particles
 
+    def check_collisions(self):
+        if self.running==1:
+            for ball in self.particles:
+                for other_ball in self.particles:
+                    if ball is not other_ball:
+                        ball.check_coll(other_ball)
+    
     def refresh(self):
-        self.canvas.after(50, self.refresh)
+        self.canvas.after(40, self.refresh)
+        self.check_collisions()
         if self.running==1:
             for ball in self.particles:
                 ball.move_ball()

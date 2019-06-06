@@ -17,8 +17,8 @@ class Ball2:
     def __init__(self, canvas, x1, y1):
         self.x1 = x1
         self.y1 = y1
-        self.x2 = random.randint(-25,25)
-        self.y2 = random.randint(-25,25)
+        self.x2 = random.randint(-5,5)
+        self.y2 = random.randint(-5,5)
         self.r = RADIUS
         self.canvas = canvas
         self.ball = canvas.create_oval(self.x1, self.y1, self.x1+(self.r*2), self.y1+(self.r*2), fill="red")
@@ -44,9 +44,9 @@ class Ball2:
 
     def check_coll(self, other):
         delta = self.r*0.01
-        odl_srodki = ((self.x1+self.r - other.x1+other.r)+(self.y1+self.r - other.y1+other.r))**2
+        odl_srodki = ((self.x1+self.r+self.x2 - other.x1+other.r+other.x2)**2+(self.y1+self.r+self.y2 - other.y1+other.r+self.y2)**2)**(0.5)
         if odl_srodki > abs(self.r - other.r) - delta and odl_srodki < abs(self.r + other.r) + delta:
-            #print("Collision!")
+            print("Collision!")
             return True
         return False
             

@@ -93,32 +93,16 @@ class Simulation:
             temp2 = random.randrange(0, HEIGHT - 80)
             self.particles.append(Ball2(self.canvas, temp1, temp2))
 
+    def return_particles(self):
+        return self.particles
+
     def refresh(self):
         self.canvas.after(50, self.refresh)
         if self.running==1:
             for ball in self.particles:
                 ball.move_ball()
 
-def redraw(window,canvas,particles):
-    print("Tada")
-    for particle  in particles:
-        particle.draw(window,canvas)
 
-
-def simulation_start(number_of_particles, window, canvas, particles):
-    # Sprawdza czy uzytkownik podal odpowiednia wartosc jako ilosc czasteczek
-    try:
-        number_of_particles = int(number_of_particles)
-    except ValueError:
-        # Jesli nie to pokazuje blad i konczy prace programu
-        messagebox.showerror("Błąd!", "Jako ilość cząsteczek nie podano wartości liczbowej!")
-        window.destroy()
-    # Na razie tylko wyswietla, to trzeba bedzie zastapic tworzeniem obiektow danej klasy
-    for i in range(number_of_particles):
-        temp1 = random.randrange(0, 1000)
-        temp2 = random.randrange(0, 1000)
-        particles.append(Ball2(canvas,temp1,temp2,temp1+10,temp2+10))
-        particles[i].move_ball()
 
 def main():
     simulation = Simulation()

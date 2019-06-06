@@ -45,7 +45,7 @@ class Ball2:
     def check_coll(self, other):
         delta = self.r*0.01
         odl_srodki = ((self.x1+self.r - other.x1+other.r)+(self.y1+self.r - other.y1+other.r))**2
-        if odl_srodki > abs(self.r - other.r) and odl_srodki < abs(self.r + other.r):
+        if odl_srodki > abs(self.r - other.r) - delta and odl_srodki < abs(self.r + other.r) + delta:
             #print("Collision!")
             return True
         return False

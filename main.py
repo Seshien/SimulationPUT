@@ -98,10 +98,9 @@ class Simulation:
 
     def check_collisions(self):
         if self.running==1:
-            for ball in self.particles:
-                for other_ball in self.particles:
-                    if ball is not other_ball:
-                        ball.check_coll(other_ball)
+            for i in range(len(self.particles)):
+                for j in range(i+1, len(self.particles)):
+                    self.particles[i].check_coll(self.particles[j])
     
     def refresh(self):
         self.canvas.after(40, self.refresh)

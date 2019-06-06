@@ -2,12 +2,13 @@ import tkinter as tk
 import random
 from tkinter import ttk
 from tkinter import Canvas
-#1 Szerokosc okna
-WIDTHMAP = 775
-# Wysokosc okna
-HEIGHTMAP = 555
-
 RADIUS = 10
+#1 Szerokosc okna
+WIDTHMAP = 780 - RADIUS
+# Wysokosc okna
+HEIGHTMAP = 560 - RADIUS
+
+
 
 BLISKOSC = 5
 
@@ -28,14 +29,14 @@ class Ball2:
         if self.y1+wektory>HEIGHTMAP:
             wektory = -(wektory-(HEIGHTMAP-self.y1))
             self.y2 = -self.y2
-        if self.y1+wektory<self.r*2:
-            wektory = -(wektory-(5-self.y1))
+        if self.y1+wektory<self.r:
+            wektory = -(wektory-(self.r-self.y1))
             self.y2 = -self.y2
         if self.x1+wektorx>WIDTHMAP:
             wektorx = -(wektorx-(WIDTHMAP-self.x1))
             self.x2 = -self.x2
-        if self.x1+wektorx<self.r*2:
-            wektorx = -(wektorx-(5-self.x1))
+        if self.x1+wektorx<self.r:
+            wektorx = -(wektorx-(self.r-self.x1))
             self.x2 = -self.x2
         self.x1 += wektorx
         self.y1 += wektory

@@ -89,7 +89,7 @@ class Simulation:
     def graph_click(self):
         print("Graph clicked")
         self.running=0
-        graph_main(self)
+        Graph(self)
 
     def add_new_particles(self,number):
         try:

@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import Canvas
 from tkinter import messagebox
 from Ball import *
+from Graph import *
 import random
 
 #1 Szerokosc okna
@@ -43,15 +44,20 @@ class Simulation:
         self.canvas = Canvas(self.window, width=WIDTHMAP, height=HEIGHTMAP, bg="#4bf2a7", borderwidth=2, relief="ridge")
         # Umieszczenia miejsca w oknie
         self.canvas.pack()
+
         add = ttk.Button(text="Dodaj",
                            command=lambda: self.add_click(number_input.get()))
-        add.pack(side="right", padx=50)
+        add.pack(side="right", padx=10)
         start = ttk.Button(text="Start/Stop",
                            command=lambda: self.start_click())
-        start.pack(side="right", padx=50)
+        start.pack(side="right", padx=10)
         reset = ttk.Button(text="Reset",
                            command=lambda: self.reset_click())
-        reset.pack(side="right", padx=50)
+        reset.pack(side="right", padx=10)
+        graph = ttk.Button(text="Wykres",
+                           command=lambda: self.graph_click())
+        graph.pack(side="right", padx=10)
+
         text_ilosc = ttk.Label(self.window, text="Ilość cząsteczek:")
         text_ilosc.pack(side="left", padx=50)
         # Entry to pole do wpisywania
@@ -79,6 +85,11 @@ class Simulation:
         self.particles.clear()
         self.window.destroy()
         self.create_window()
+
+    def graph_click(self):
+        print("Graph clicked")
+        self.running=0
+        graph_main(self)
 
     def add_new_particles(self,number):
         try:
@@ -121,6 +132,7 @@ class Simulation:
 
     # Tu trzeba napisac kolidowanie
     def have_collided(self, i, j):
+
         pass
 
 

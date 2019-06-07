@@ -14,8 +14,8 @@ class Ball2:
         self.x2 = random.randint(-5,5)
         self.y2 = random.randint(-5,5)
         self.r = RADIUS
-        self.limitx = limitx - RADIUS
-        self.limity = limity - RADIUS
+        self.limitx = limitx - self.r
+        self.limity = limity - self.r
         self.canvas = canvas
         self.ball = canvas.create_oval(self.x1, self.y1, self.x1+(self.r*2), self.y1+(self.r*2), fill="red")
 
@@ -24,16 +24,16 @@ class Ball2:
         wektory=self.y2
         if self.y1+wektory>self.limity:
             wektory = -(wektory-(self.limity-self.y1))
-            self.y2 = -self.y2
+            self.y2 = -abs(self.y2)
         if self.y1+wektory<self.r:
             wektory = -(wektory-(self.r-self.y1))
-            self.y2 = -self.y2
+            self.y2 = abs(self.y2)
         if self.x1+wektorx>self.limitx:
             wektorx = -(wektorx-(self.limitx-self.x1))
-            self.x2 = -self.x2
+            self.x2 = -abs(self.x2)
         if self.x1+wektorx<self.r:
             wektorx = -(wektorx-(self.r-self.x1))
-            self.x2 = -self.x2
+            self.x2 = abs(self.x2)
         self.x1 += wektorx
         self.y1 += wektory
         self.canvas.move(self.ball, wektorx, wektory)

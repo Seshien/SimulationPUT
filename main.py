@@ -4,6 +4,7 @@ from tkinter import Canvas
 from tkinter import messagebox
 from Ball import *
 from Graph import *
+import math
 import random
 
 #1 Szerokosc okna
@@ -164,6 +165,11 @@ class Simulation:
 
     # Tu trzeba napisac kolidowanie
     def have_collided(self, i, j):
+        # Wyznaczanie funkcji ax+b
+        a = (self.particles[i].y1-self.particles[j].y1)/(self.particles[i].x1-self.particles[j].x1)
+        b = self.particles[i].y1-a*self.particles[i].x1
+        # Wyznaczenie kata pomiedzy dwoma czasteczkami
+        kat = math.atan(a)
 
         pass
 

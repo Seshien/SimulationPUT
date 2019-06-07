@@ -16,6 +16,7 @@ WIDTHMAP = 780
 # Wysokosc okna
 HEIGHTMAP = 560
 
+RADIUS = 10
 # Czy mozna rozszerzac
 RESIZABLE = 0
 
@@ -25,6 +26,8 @@ class Simulation:
         # Lista wszystkich czasteczek
         self.particles = []
         self.running=0
+        self.borderx=WIDTHMAP
+        self.bordery=HEIGHTMAP
         self.create_window()
 
     def create_window(self):
@@ -48,6 +51,9 @@ class Simulation:
         add = ttk.Button(text="Dodaj",
                            command=lambda: self.add_click(number_input.get()))
         add.pack(side="right", padx=10)
+        changeborders = ttk.Button(text="Granice",
+                           command=lambda: self.change_click())
+        changeborders.pack(side="right", padx=10)
         start = ttk.Button(text="Start/Stop",
                            command=lambda: self.start_click())
         start.pack(side="right", padx=10)
@@ -84,12 +90,38 @@ class Simulation:
         self.running=0
         self.particles.clear()
         self.window.destroy()
+        self.borderx=WIDTHMAP
+        self.bordery=HEIGHTMAP
         self.create_window()
 
     def graph_click(self):
         print("Graph clicked")
         self.running=0
         Graph(self)
+
+    def change_click(self):
+        window = tk.Tk()
+        text = ttk.Label(window, text="Podaj wartosci X i Y", width=20)
+        text.pack()
+        window.title("Podaj wartosci")
+        window.geometry("400x100")
+        window.resizable(RESIZABLE, RESIZABLE)
+        x_input = ttk.Entry(window)
+        x_input.pack(side="left", padx=10)
+        x_input.insert(0, str(self.borderx))
+        y_input = ttk.Entry(window)
+        y_input.pack(side="left", padx=10)
+        y_input.insert(0, str(self.bordery))
+        ok = ttk.Button(window, text="OK",
+                           command=lambda: self.change_ok_click(window, int(x_input.get()), int(y_input.get())))
+        ok.pack(side="right", padx=10)
+
+    def change_ok_click(self, window, x, y):
+        self.borderx=x
+        self.bordery=y
+        window.destroy()
+        for ball in self.particles:
+            ball.change_limits(x, y)
 
     def add_new_particles(self,number):
         try:
@@ -100,9 +132,9 @@ class Simulation:
             self.window.destroy()
         # Na razie tylko wyswietla, to trzeba bedzie zastapic tworzeniem obiektow danej klasy
         for i in range(number_of_particles):
-            temp1 = random.randrange(0, WIDTH - 20)
-            temp2 = random.randrange(0, HEIGHT - 80)
-            self.particles.append(Ball2(self.canvas, temp1, temp2))
+            temp1 = random.randrange(0, self.borderx - 20)
+            temp2 = random.randrange(0, self.bordery - 80)
+            self.particles.append(Ball2(self.canvas, temp1, temp2, self.borderx, self.bordery))
 
     def return_particles(self):
         return self.particles

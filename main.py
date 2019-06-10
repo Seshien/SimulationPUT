@@ -5,6 +5,7 @@ from tkinter import messagebox
 from Ball import *
 from Graph import *
 import random
+import numpy
 
 #1 Szerokosc okna
 WIDTH = 800
@@ -16,7 +17,7 @@ WIDTHMAP = 780
 # Wysokosc okna
 HEIGHTMAP = 560
 
-RADIUS = 10
+RADIUS = 2.5
 # Czy mozna rozszerzac
 RESIZABLE = 0
 
@@ -132,8 +133,8 @@ class Simulation:
             self.window.destroy()
         # Na razie tylko wyswietla, to trzeba bedzie zastapic tworzeniem obiektow danej klasy
         for i in range(number_of_particles):
-            temp1 = random.randrange(0, self.borderx - 20)
-            temp2 = random.randrange(0, self.bordery - 80)
+            temp1 = random.randrange(0, self.borderx)
+            temp2 = random.randrange(0, self.bordery)
             self.particles.append(Ball2(self.canvas, temp1, temp2, self.borderx, self.bordery))
 
     def return_particles(self):
@@ -164,7 +165,29 @@ class Simulation:
 
     # Tu trzeba napisac kolidowanie
     def have_collided(self, i, j):
+        ball1 = self.particles[i]
+        ball2 = self.particles[j]
+        ball1speed = numpy.array([ball1.x2, ball1.y2])
+        ball2speed = numpy.array([ball2.x2, ball2.y2])
+        vectordist = numpy.array([ball1.x1-ball2.x1, ball1.y1-ball2.y1])
+        distanceSquared = vectordist[0] * vectordist[0] + vectordist[1] * vectordist[1]
+        FirstParallel = (ball1.x2 * vectordist[0] + ball1.y2 * vectordist[1]) / distanceSquared * vectordist
+        SecondParallel = (ball2.x2 * vectordist[0] + ball2.y2 * vectordist[1]) / distanceSquared * vectordist
+        FirstPerpendicular = ball1speed - FirstParallel
+        SecondPerpendicular = ball2speed - SecondParallel
 
+        if (SecondParallel - FirstParallel)[0] * vectordist[0] < 0 or (SecondParallel - FirstParallel)[1] * vectordist[1] < 0:
+            print("Change of velocity")
+            print(ball1.return_coordinates()[2:], ball2.return_coordinates()[2:])
+            print(ball1speed, ball2speed)
+            ball1speed = FirstPerpendicular + SecondParallel
+            ball2speed = SecondPerpendicular + FirstParallel
+            ball1.x2 = ball1speed[0]
+            ball1.y2 = ball1speed[1]
+            ball2.x2 = ball2speed[0]
+            ball2.y2 = ball2speed[1]
+            print(ball1.return_coordinates()[2:], ball2.return_coordinates()[2:])
+            print(ball1speed, ball2speed)
         pass
 
 

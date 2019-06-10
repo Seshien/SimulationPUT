@@ -11,8 +11,8 @@ class Ball2:
     def __init__(self, canvas, x1, y1, limitx, limity):
         self.x1 = x1
         self.y1 = y1
-        self.x2 = random.randint(-5,5)
-        self.y2 = random.randint(-5,5)
+        self.x2 = random.random() * 2 - 1
+        self.y2 = random.random() * 2 - 1
         self.r = RADIUS
         self.limitx = limitx - self.r
         self.limity = limity - self.r

@@ -4,6 +4,7 @@ from tkinter import Canvas
 from tkinter import messagebox
 from Ball import *
 from Graph import *
+import math
 import random
 import numpy
 
@@ -177,7 +178,6 @@ class Simulation:
         SecondPerpendicular = ball2speed - SecondParallel
 
         if (SecondParallel - FirstParallel)[0] * vectordist[0] < 0 or (SecondParallel - FirstParallel)[1] * vectordist[1] < 0:
-            print("Change of velocity")
             print(ball1.return_coordinates()[2:], ball2.return_coordinates()[2:])
             print(ball1speed, ball2speed)
             ball1speed = FirstPerpendicular + SecondParallel

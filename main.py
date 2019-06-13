@@ -49,7 +49,7 @@ class Simulation:
         self.canvas = Canvas(self.window, width=WIDTHMAP, height=HEIGHTMAP, bg="#4bf2a7", borderwidth=2, relief="ridge")
         # Umieszczenia miejsca w oknie
         self.canvas.pack()
-
+        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+RADIUS, self.bordery+RADIUS)
         add = ttk.Button(text="Dodaj",
                            command=lambda: self.add_click(number_input.get()))
         add.pack(side="right", padx=10)
@@ -124,6 +124,8 @@ class Simulation:
         window.destroy()
         for ball in self.particles:
             ball.change_limits(x, y)
+        self.canvas.delete(self.borders)
+        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+RADIUS, self.bordery+RADIUS)
 
     def add_new_particles(self,number):
         try:
@@ -162,6 +164,7 @@ class Simulation:
                     self.particles[i].move_ball()
                 else:
                     self.have_collided(i, j)
+                    self.particles[i].move_ball()
         self.canvas.after(10, self.refresh)
 
     # Tu trzeba napisac kolidowanie

@@ -17,8 +17,11 @@ HEIGHT = 640
 WIDTHMAP = 780
 # Wysokosc okna
 HEIGHTMAP = 560
-
+#Promien cząsteczki
 RADIUS = 2.5
+#Szybkosc maksymalna czasteczek (ta wartosc / 2)
+SPEED = 4
+
 # Czy mozna rozszerzac
 RESIZABLE = 0
 
@@ -149,22 +152,11 @@ class Simulation:
                 for j in range(i+1, len(self.particles)):
                     if self.particles[i].check_coll(self.particles[j]):
                         self.have_collided(i, j)
-
-    def check_collision(self,i):
-            for j in range(i+1, len(self.particles)):
-                    if self.particles[i].check_coll(self.particles[j]):
-                        return j
-            return -1
+                self.particles[i].move_ball()
 
     def refresh(self):
         if self.running==1:
-            for i in range(len(self.particles)):
-                j = self.check_collision(i)
-                if j ==- 1:
-                    self.particles[i].move_ball()
-                else:
-                    self.have_collided(i, j)
-                    self.particles[i].move_ball()
+            self.check_collisions()
         self.canvas.after(10, self.refresh)
 
     # Tu trzeba napisac kolidowanie
@@ -175,13 +167,13 @@ class Simulation:
         ball2speed = numpy.array([ball2.x2, ball2.y2])
         vectordist = numpy.array([ball1.x1-ball2.x1, ball1.y1-ball2.y1])
         distanceSquared = vectordist[0] * vectordist[0] + vectordist[1] * vectordist[1]
-        FirstParallel = (ball1.x2 * vectordist[0] + ball1.y2 * vectordist[1]) / distanceSquared * vectordist
-        SecondParallel = (ball2.x2 * vectordist[0] + ball2.y2 * vectordist[1]) / distanceSquared * vectordist
+
+        FirstParallel = (ball1speed[0] * vectordist[0] + ball1speed[1] * vectordist[1]) / distanceSquared * vectordist
+        SecondParallel = (ball2speed[0] * vectordist[0] + ball2speed[1] * vectordist[1]) / distanceSquared * vectordist
         FirstPerpendicular = ball1speed - FirstParallel
         SecondPerpendicular = ball2speed - SecondParallel
 
         if (SecondParallel - FirstParallel)[0] * vectordist[0] < 0 or (SecondParallel - FirstParallel)[1] * vectordist[1] < 0:
-            print(ball1.return_coordinates()[2:], ball2.return_coordinates()[2:])
             print(ball1speed, ball2speed)
             ball1speed = FirstPerpendicular + SecondParallel
             ball2speed = SecondPerpendicular + FirstParallel
@@ -189,7 +181,6 @@ class Simulation:
             ball1.y2 = ball1speed[1]
             ball2.x2 = ball2speed[0]
             ball2.y2 = ball2speed[1]
-            print(ball1.return_coordinates()[2:], ball2.return_coordinates()[2:])
             print(ball1speed, ball2speed)
         pass
 

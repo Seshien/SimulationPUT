@@ -11,8 +11,8 @@ class Ball2:
     def __init__(self, canvas, x1, y1, limitx, limity):
         self.x1 = x1
         self.y1 = y1
-        self.x2 = random.random() * 2 - 1
-        self.y2 = random.random() * 2 - 1
+        self.x2 = (random.random() - 0.5) * SPEED
+        self.y2 = (random.random() - 0.5) * SPEED
         self.r = RADIUS
         self.limitx = limitx - self.r
         self.limity = limity - self.r
@@ -39,8 +39,9 @@ class Ball2:
         self.canvas.move(self.ball, wektorx, wektory)
 
     def check_coll(self, other):
-        delta = self.r*0.01
-        odl_srodki = ((self.x1+self.x2 - (other.x1+other.x2))**2+(self.y1+self.y2 - (other.y1+self.y2))**2)**(0.5)
+        delta = self.r*0.1
+        odl_srodki = ((self.x1 -(other.x1))**2 + (self.y1 - (other.y1))**2)**0.5
+        odl_srodki2 = ((self.x1+self.x2 - (other.x1+other.x2))**2 + (self.y1+self.y2 - (other.y1+other.y2))**2)**0.5
         if odl_srodki > abs(self.r - other.r) - delta and odl_srodki < abs(self.r + other.r) + delta:
             #print("Collision!")
             return True

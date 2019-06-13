@@ -42,7 +42,8 @@ class Ball2:
         delta = self.r*0.1
         odl_srodki = ((self.x1 -(other.x1))**2 + (self.y1 - (other.y1))**2)**0.5
         odl_srodki2 = ((self.x1+self.x2 - (other.x1+other.x2))**2 + (self.y1+self.y2 - (other.y1+other.y2))**2)**0.5
-        if odl_srodki > abs(self.r - other.r) - delta and odl_srodki < abs(self.r + other.r) + delta:
+        if odl_srodki <= abs(self.r + other.r) + delta:
+            #odl_srodki > abs(self.r - other.r) - delta and
             #print("Collision!")
             return True
         return False

@@ -20,7 +20,7 @@ HEIGHTMAP = 560
 #Promien cząsteczki
 RADIUS = 2.5
 #Szybkosc maksymalna czasteczek (ta wartosc / 2)
-SPEED = 4
+SPEED = 50
 
 # Czy mozna rozszerzac
 RESIZABLE = 0
@@ -31,8 +31,8 @@ class Simulation:
         # Lista wszystkich czasteczek
         self.particles = []
         self.running=0
-        self.borderx=WIDTHMAP
-        self.bordery=HEIGHTMAP
+        self.borderx=200
+        self.bordery=200
         self.create_window()
 
     def create_window(self):
@@ -157,7 +157,7 @@ class Simulation:
     def refresh(self):
         if self.running==1:
             self.check_collisions()
-        self.canvas.after(10, self.refresh)
+        self.canvas.after(100, self.refresh)
 
     # Tu trzeba napisac kolidowanie
     def have_collided(self, i, j):
@@ -174,14 +174,14 @@ class Simulation:
         SecondPerpendicular = ball2speed - SecondParallel
 
         if (SecondParallel - FirstParallel)[0] * vectordist[0] < 0 or (SecondParallel - FirstParallel)[1] * vectordist[1] < 0:
-            print(ball1speed, ball2speed)
+            #print(ball1speed, ball2speed, (ball1speed+ball2speed)[0] + (ball1speed+ball2speed)[1])
             ball1speed = FirstPerpendicular + SecondParallel
             ball2speed = SecondPerpendicular + FirstParallel
             ball1.x2 = ball1speed[0]
             ball1.y2 = ball1speed[1]
             ball2.x2 = ball2speed[0]
             ball2.y2 = ball2speed[1]
-            print(ball1speed, ball2speed)
+            #print(ball1speed, ball2speed, (ball1speed+ball2speed)[0] + (ball1speed+ball2speed)[1])
         pass
 
 

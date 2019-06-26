@@ -148,22 +148,25 @@ class Simulation:
         #    self.particles.append(Ball2(self.canvas, temp1, temp2, self.borderx, self.bordery))
         # Generowanie czasteczek na odpowiednich miejscach
         sector_width = self.borderx/(R*2+1)
-        sector_height = self.bordery/(R*2+1)
+        sector_height = self.bordery
         print("sector_width: ", sector_width)
         print("sector_height: ", sector_height)
         # Ilosc czasteczek w rzedzie
-        number_x = int(math.sqrt(number_of_particles)) + 1
-        number_y = int(math.sqrt(number_of_particles))
+        old_number_x = int(math.sqrt(number_of_particles))
+        old_number_y = math.ceil(number_of_particles/old_number_x)
+        number_x = math.ceil(old_number_y * old_number_x / (R*2+1))
+        number_y = math.ceil((old_number_y * (R*2+1))/old_number_x)
+
         print("number_x:", number_x, "number_y:", number_y)
         # Przemieszczenie czasteczki wzgledem innej czasteczki w poziomie lub w pionie w chwili startu
-        offset_x = sector_width/number_x
-        offset_y = sector_height/number_y
+        offset_x = (sector_width - number_x * RADIUS * 2)/(number_x+1)
+        offset_y = (sector_height - number_y * RADIUS * 2)/(number_y+1)
         print("offset_x:", offset_x, "offset_y:", offset_y)
         utworzone_czasteczki = 0
         #self.particles.append(Ball2(self.canvas, 0, 0, self.borderx, self.bordery))
-        for i in range(number_y):
-            for j in range(number_x):
-                self.particles.append(Ball2(self.canvas, j * offset_x, i * offset_y, self.borderx, self.bordery))
+        for j in range(number_x):
+            for i in range(number_y):
+                self.particles.append(Ball2(self.canvas, ((j+1) * offset_x) + j * RADIUS * 2 , ((i+1) * offset_y) + i * RADIUS * 2, self.borderx, self.bordery))
                 utworzone_czasteczki += 1
                 if number_of_particles <= utworzone_czasteczki:
                     break

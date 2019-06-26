@@ -7,6 +7,7 @@ from Graph import *
 import math
 import random
 import numpy
+import math
 
 #1 Szerokosc okna
 WIDTH = 800
@@ -24,6 +25,9 @@ SPEED = 50
 
 # Czy mozna rozszerzac
 RESIZABLE = 0
+
+# Zmienna odpowiadajaca za dzielenie na sektory od <-R, R>
+R = 5
 
 
 class Simulation:
@@ -49,7 +53,7 @@ class Simulation:
         # Umieszcza napis w oknie
         text.pack()
         # Utworzenie miejsca do rysowania
-        self.canvas = Canvas(self.window, width=WIDTHMAP, height=HEIGHTMAP, bg="#4bf2a7", borderwidth=2, relief="ridge")
+        self.canvas = Canvas(self.window, width=WIDTHMAP, height=HEIGHTMAP, bg="#4bf2a7")#, borderwidth=2, relief="ridge")
         # Umieszczenia miejsca w oknie
         self.canvas.pack()
         self.borders = self.canvas.create_rectangle(0, 0, self.borderx+RADIUS, self.bordery+RADIUS)
@@ -138,10 +142,33 @@ class Simulation:
             messagebox.showerror("Błąd!", "Jako ilość cząsteczek nie podano wartości liczbowej!")
             self.window.destroy()
         # Na razie tylko wyswietla, to trzeba bedzie zastapic tworzeniem obiektow danej klasy
-        for i in range(number_of_particles):
-            temp1 = random.randrange(0, self.borderx)
-            temp2 = random.randrange(0, self.bordery)
-            self.particles.append(Ball2(self.canvas, temp1, temp2, self.borderx, self.bordery))
+        #for i in range(number_of_particles):
+        #    temp1 = random.randrange(0, self.borderx)
+        #    temp2 = random.randrange(0, self.bordery)
+        #    self.particles.append(Ball2(self.canvas, temp1, temp2, self.borderx, self.bordery))
+        # Generowanie czasteczek na odpowiednich miejscach
+        sector_width = self.borderx/(R*2+1)
+        sector_height = self.bordery/(R*2+1)
+        print("sector_width: ", sector_width)
+        print("sector_height: ", sector_height)
+        # Ilosc czasteczek w rzedzie
+        number_x = int(math.sqrt(number_of_particles)) + 1
+        number_y = int(math.sqrt(number_of_particles))
+        print("number_x:", number_x, "number_y:", number_y)
+        # Przemieszczenie czasteczki wzgledem innej czasteczki w poziomie lub w pionie w chwili startu
+        offset_x = sector_width/number_x
+        offset_y = sector_height/number_y
+        print("offset_x:", offset_x, "offset_y:", offset_y)
+        utworzone_czasteczki = 0
+        #self.particles.append(Ball2(self.canvas, 0, 0, self.borderx, self.bordery))
+        for i in range(number_y):
+            for j in range(number_x):
+                self.particles.append(Ball2(self.canvas, j * offset_x, i * offset_y, self.borderx, self.bordery))
+                utworzone_czasteczki += 1
+                if number_of_particles <= utworzone_czasteczki:
+                    break
+            if number_of_particles <= utworzone_czasteczki:
+                break
 
     def return_particles(self):
         return self.particles

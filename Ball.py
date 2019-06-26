@@ -9,11 +9,11 @@ from main import *
 
 class Ball2:
     def __init__(self, canvas, x1, y1, limitx, limity):
-        self.x1 = x1
-        self.y1 = y1
+        self.r = RADIUS
+        self.x1 = x1 + int(self.r)
+        self.y1 = y1 + int(self.r)
         self.x2 = (random.random() - 0.5) * SPEED
         self.y2 = (random.random() - 0.5) * SPEED
-        self.r = RADIUS
         self.limitx = limitx - self.r
         self.limity = limity - self.r
         self.canvas = canvas

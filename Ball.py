@@ -38,6 +38,15 @@ class Ball2:
         self.y1 += wektory
         self.canvas.move(self.ball, wektorx, wektory)
 
+    def change_color_blue(self):
+        self.canvas.delete(self.ball)
+        self.ball = self.canvas.create_oval(self.x1, self.y1, self.x1+(self.r*2), self.y1+(self.r*2), fill="blue")
+        self.canvas.after(200, self.change_color_red)
+
+    def change_color_red(self):
+        self.canvas.delete(self.ball)
+        self.ball = self.canvas.create_oval(self.x1, self.y1, self.x1+(self.r*2), self.y1+(self.r*2), fill="red")
+
     def check_coll(self, other):
         delta = self.r*0.1
         odl_srodki = ((self.x1 -(other.x1))**2 + (self.y1 - (other.y1))**2)**0.5

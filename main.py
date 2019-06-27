@@ -19,9 +19,9 @@ WIDTHMAP = 780
 # Wysokosc okna
 HEIGHTMAP = 560
 #Promien cząsteczki
-RADIUS = 2.5
+RADIUS = 5 #2.5
 #Szybkosc maksymalna czasteczek (ta wartosc / 2)
-SPEED = 50
+SPEED = 10 # 50
 
 # Czy mozna rozszerzac
 RESIZABLE = 0
@@ -212,7 +212,8 @@ class Simulation:
             ball2.x2 = ball2speed[0]
             ball2.y2 = ball2speed[1]
             #print(ball1speed, ball2speed, (ball1speed+ball2speed)[0] + (ball1speed+ball2speed)[1])
-        pass
+        self.particles[i].change_color_blue()
+        self.particles[j].change_color_blue()
 
 
 def main():

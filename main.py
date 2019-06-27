@@ -12,21 +12,22 @@ import math
 #1 Szerokosc okna
 WIDTH = 800
 # Wysokosc okna
-HEIGHT = 860
+HEIGHT = 780
 
 #1 Szerokosc okna
-WIDTHMAP = 780
+WIDTHMAP = 700
 # Wysokosc okna
-HEIGHTMAP = 780
+HEIGHTMAP = 700
 #Promieząsteczki
 RADIUS = 5 #2.5
 #Szybkosc maksymalna czasteczek (ta wartosc / 2)
 SPEED = 5 # 50
 # Krok czasu (W)
-TIME_STEP = 100
+TIME_STEP = 50
 # Czy mozna rozszerzac
 RESIZABLE = 0
-
+# Czzy wyswietlac operacje?
+PRINT = 0
 # Zmienna odpowiadajaca za dzielenie na sektory od <-R, R>
 R = 5
 
@@ -86,11 +87,13 @@ class Simulation:
         self.window.mainloop()
 
     def add_click(self,number):
-        print("Add clicked")
+        if PRINT:
+            print("Add clicked")
         self.add_new_particles(number)
 
     def start_click(self):
-        print("Start clicked")
+        if PRINT:
+            print("Start clicked")
         if self.running == 0:
             self.running = 1
             self.canvas.delete(self.colored_part)
@@ -99,7 +102,8 @@ class Simulation:
             self.running = 0
 
     def reset_click(self):
-        print("Reset clicked")
+        if PRINT:
+            print("Reset clicked")
         self.running=0
         self.particles.clear()
         self.canvas.delete(self.colored_part)
@@ -109,7 +113,8 @@ class Simulation:
         self.create_window()
 
     def graph_click(self):
-        print("Graph clicked")
+        if PRINT:
+            print("Graph clicked")
         self.running=0
         Graph(self)
 
@@ -157,8 +162,9 @@ class Simulation:
         # Generowanie czasteczek na odpowiednich miejscach
         sector_width = self.borderx/(R*2+1)
         sector_height = self.bordery
-        print("sector_width: ", sector_width)
-        print("sector_height: ", sector_height)
+        if PRINT:
+            print("sector_width: ", sector_width)
+            print("sector_height: ", sector_height)
         # Ilosc czasteczek w rzedzie
         if number_of_particles > R*2+1:
             number_x = math.ceil(number_of_particles/(R*2+1))
@@ -175,12 +181,13 @@ class Simulation:
         #old_number_y = math.ceil(number_of_particles/old_number_x)
         #number_x = math.ceil(old_number_y * old_number_x / (R*2+1))
         #number_y = math.ceil((old_number_y * (R*2+1))/old_number_x)
-
-        print("number_x:", number_x, "number_y:", number_y)
+        if PRINT:
+            print("number_x:", number_x, "number_y:", number_y)
         # Przemieszczenie czasteczki wzgledem innej czasteczki w poziomie lub w pionie w chwili startu
         offset_x = (sector_width - number_x * RADIUS * 2)/(number_x+1)
         offset_y = (sector_height - number_y * RADIUS * 2)/(number_y+1)
-        print("offset_x:", offset_x, "offset_y:", offset_y)
+        if PRINT:
+            print("offset_x:", offset_x, "offset_y:", offset_y)
         utworzone_czasteczki = 0
         #self.particles.append(Ball2(self.canvas, 0, 0, self.borderx, self.bordery))
         for j in range(number_x):
@@ -200,7 +207,8 @@ class Simulation:
             for i in range(len(self.particles)):
                 for j in range(i+1, len(self.particles)):
                     if self.particles[i].check_coll(self.particles[j]):
-                        print("Ball", i, "collided with ball", j)
+                        if PRINT:
+                            print("Ball", i, "collided with ball", j)
                         self.have_collided(i, j)
                 self.particles[i].move_ball()
 
@@ -213,8 +221,9 @@ class Simulation:
     def have_collided(self, i, j):
         ball1 = self.particles[i]
         ball2 = self.particles[j]
-        print(ball1.x2, ball1.y2)
-        print(ball2.x2, ball2.y2)
+        if PRINT:
+            print(ball1.x2, ball1.y2)
+            print(ball2.x2, ball2.y2)
         ball1speed = numpy.array([ball1.x2, ball1.y2])
         ball2speed = numpy.array([ball2.x2, ball2.y2])
         vectordist = numpy.array([ball1.x1-ball2.x1, ball1.y1-ball2.y1])
@@ -236,8 +245,9 @@ class Simulation:
             #print(ball1speed, ball2speed, (ball1speed+ball2speed)[0] + (ball1speed+ball2speed)[1])
         self.particles[i].change_color_blue(TIME_STEP)
         self.particles[j].change_color_green(TIME_STEP)
-        print(ball1.x2, ball1.y2)
-        print(ball2.x2, ball2.y2)
+        if PRINT:
+            print(ball1.x2, ball1.y2)
+            print(ball2.x2, ball2.y2)
 
 
 def main():

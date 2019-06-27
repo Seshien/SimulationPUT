@@ -141,11 +141,6 @@ class Simulation:
             # Jesli nie to pokazuje blad i konczy prace programu
             messagebox.showerror("Błąd!", "Jako ilość cząsteczek nie podano wartości liczbowej!")
             self.window.destroy()
-        if number_of_particles == 0:
-            self.particles.append(Ball2(self.canvas, 50 , 50, self.borderx, self.bordery, 5, 0))
-            self.particles.append(Ball2(self.canvas, 100 , 50, self.borderx, self.bordery, -3, 0))
-            number_of_partciles = 2
-            return
         # Na razie tylko wyswietla, to trzeba bedzie zastapic tworzeniem obiektow danej klasy
         #for i in range(number_of_particles):
         #    temp1 = random.randrange(0, self.borderx)
@@ -210,6 +205,8 @@ class Simulation:
     def have_collided(self, i, j):
         ball1 = self.particles[i]
         ball2 = self.particles[j]
+        print(ball1.x2, ball1.y2)
+        print(ball2.x2, ball2.y2)
         ball1speed = numpy.array([ball1.x2, ball1.y2])
         ball2speed = numpy.array([ball2.x2, ball2.y2])
         vectordist = numpy.array([ball1.x1-ball2.x1, ball1.y1-ball2.y1])
@@ -220,17 +217,19 @@ class Simulation:
         FirstPerpendicular = ball1speed - FirstParallel
         SecondPerpendicular = ball2speed - SecondParallel
 
-        if (SecondParallel - FirstParallel)[0] * vectordist[0] < 0 or (SecondParallel - FirstParallel)[1] * vectordist[1] < 0:
+        #if (SecondParallel - FirstParallel)[0] * vectordist[0] < 0 or (SecondParallel - FirstParallel)[1] * vectordist[1] < 0:
             #print(ball1speed, ball2speed, (ball1speed+ball2speed)[0] + (ball1speed+ball2speed)[1])
-            ball1speed = FirstPerpendicular + SecondParallel
-            ball2speed = SecondPerpendicular + FirstParallel
-            ball1.x2 = ball1speed[0]
-            ball1.y2 = ball1speed[1]
-            ball2.x2 = ball2speed[0]
-            ball2.y2 = ball2speed[1]
+        ball1speed = FirstPerpendicular + SecondParallel
+        ball2speed = SecondPerpendicular + FirstParallel
+        ball1.x2 = ball1speed[0]
+        ball1.y2 = ball1speed[1]
+        ball2.x2 = ball2speed[0]
+        ball2.y2 = ball2speed[1]
             #print(ball1speed, ball2speed, (ball1speed+ball2speed)[0] + (ball1speed+ball2speed)[1])
         self.particles[i].change_color_blue()
         self.particles[j].change_color_green()
+        print(ball1.x2, ball1.y2)
+        print(ball2.x2, ball2.y2)
 
 
 def main():

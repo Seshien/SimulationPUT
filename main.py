@@ -18,10 +18,10 @@ HEIGHT = 640
 WIDTHMAP = 780
 # Wysokosc okna
 HEIGHTMAP = 560
-#Promien cząsteczki
+#Promieząsteczki
 RADIUS = 5 #2.5
 #Szybkosc maksymalna czasteczek (ta wartosc / 2)
-SPEED = 10 # 50
+SPEED = 5 # 50
 
 # Czy mozna rozszerzac
 RESIZABLE = 0
@@ -141,6 +141,11 @@ class Simulation:
             # Jesli nie to pokazuje blad i konczy prace programu
             messagebox.showerror("Błąd!", "Jako ilość cząsteczek nie podano wartości liczbowej!")
             self.window.destroy()
+        if number_of_particles == 0:
+            self.particles.append(Ball2(self.canvas, 50 , 50, self.borderx, self.bordery, 5, 0))
+            self.particles.append(Ball2(self.canvas, 100 , 50, self.borderx, self.bordery, -3, 0))
+            number_of_partciles = 2
+            return
         # Na razie tylko wyswietla, to trzeba bedzie zastapic tworzeniem obiektow danej klasy
         #for i in range(number_of_particles):
         #    temp1 = random.randrange(0, self.borderx)
@@ -152,10 +157,21 @@ class Simulation:
         print("sector_width: ", sector_width)
         print("sector_height: ", sector_height)
         # Ilosc czasteczek w rzedzie
-        old_number_x = int(math.sqrt(number_of_particles))
-        old_number_y = math.ceil(number_of_particles/old_number_x)
-        number_x = math.ceil(old_number_y * old_number_x / (R*2+1))
-        number_y = math.ceil((old_number_y * (R*2+1))/old_number_x)
+        if number_of_particles > R*2+1:
+            number_x = math.ceil(number_of_particles/(R*2+1))
+            number_y = math.sqrt(number_x)
+            number_x = int(number_x/int(number_y))
+            number_y = math.ceil(number_y)
+            number_y *= 11
+        else:
+            number_x = 1
+            number_y = number_of_particles
+
+
+        #old_number_x = int(math.sqrt(number_of_particles))
+        #old_number_y = math.ceil(number_of_particles/old_number_x)
+        #number_x = math.ceil(old_number_y * old_number_x / (R*2+1))
+        #number_y = math.ceil((old_number_y * (R*2+1))/old_number_x)
 
         print("number_x:", number_x, "number_y:", number_y)
         # Przemieszczenie czasteczki wzgledem innej czasteczki w poziomie lub w pionie w chwili startu
@@ -181,6 +197,7 @@ class Simulation:
             for i in range(len(self.particles)):
                 for j in range(i+1, len(self.particles)):
                     if self.particles[i].check_coll(self.particles[j]):
+                        print("Ball", i, "collided with ball", j)
                         self.have_collided(i, j)
                 self.particles[i].move_ball()
 
@@ -213,7 +230,7 @@ class Simulation:
             ball2.y2 = ball2speed[1]
             #print(ball1speed, ball2speed, (ball1speed+ball2speed)[0] + (ball1speed+ball2speed)[1])
         self.particles[i].change_color_blue()
-        self.particles[j].change_color_blue()
+        self.particles[j].change_color_green()
 
 
 def main():

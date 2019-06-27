@@ -8,12 +8,12 @@ from main import *
 
 
 class Ball2:
-    def __init__(self, canvas, x1, y1, limitx, limity):
+    def __init__(self, canvas, x1, y1, limitx, limity, x2 = (random.random() - 0.5) * SPEED, y2 = (random.random() - 0.5) * SPEED):
         self.r = RADIUS
         self.x1 = x1 + int(self.r)
         self.y1 = y1 + int(self.r)
-        self.x2 = (random.random() - 0.5) * SPEED
-        self.y2 = (random.random() - 0.5) * SPEED
+        self.x2 = x2
+        self.y2 = y2
         self.limitx = limitx - self.r
         self.limity = limity - self.r
         self.canvas = canvas
@@ -42,16 +42,23 @@ class Ball2:
         self.canvas.delete(self.ball)
         self.ball = self.canvas.create_oval(self.x1, self.y1, self.x1+(self.r*2), self.y1+(self.r*2), fill="blue")
         self.canvas.after(200, self.change_color_red)
+        print("Blue ball pos before:", self.x1, self.y1)
+
+    def change_color_green(self):
+        self.canvas.delete(self.ball)
+        self.ball = self.canvas.create_oval(self.x1, self.y1, self.x1+(self.r*2), self.y1+(self.r*2), fill="green")
+        self.canvas.after(200, self.change_color_red)
 
     def change_color_red(self):
         self.canvas.delete(self.ball)
         self.ball = self.canvas.create_oval(self.x1, self.y1, self.x1+(self.r*2), self.y1+(self.r*2), fill="red")
+        print("Blue ball pos after:", self.x1, self.y1)
 
     def check_coll(self, other):
         delta = self.r*0.1
         odl_srodki = ((self.x1 -(other.x1))**2 + (self.y1 - (other.y1))**2)**0.5
         odl_srodki2 = ((self.x1+self.x2 - (other.x1+other.x2))**2 + (self.y1+self.y2 - (other.y1+other.y2))**2)**0.5
-        if odl_srodki <= abs(self.r + other.r) + delta:
+        if odl_srodki <= abs(self.r + other.r) + delta and odl_srodki2 < odl_srodki:
             #odl_srodki > abs(self.r - other.r) - delta and
             #print("Collision!")
             return True

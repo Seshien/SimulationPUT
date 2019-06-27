@@ -12,17 +12,18 @@ import math
 #1 Szerokosc okna
 WIDTH = 800
 # Wysokosc okna
-HEIGHT = 640
+HEIGHT = 860
 
 #1 Szerokosc okna
 WIDTHMAP = 780
 # Wysokosc okna
-HEIGHTMAP = 560
+HEIGHTMAP = 780
 #Promieząsteczki
 RADIUS = 5 #2.5
 #Szybkosc maksymalna czasteczek (ta wartosc / 2)
 SPEED = 5 # 50
-
+# Krok czasu (W)
+TIME_STEP = 100
 # Czy mozna rozszerzac
 RESIZABLE = 0
 
@@ -56,7 +57,9 @@ class Simulation:
         self.canvas = Canvas(self.window, width=WIDTHMAP, height=HEIGHTMAP, bg="#4bf2a7")#, borderwidth=2, relief="ridge")
         # Umieszczenia miejsca w oknie
         self.canvas.pack()
-        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+RADIUS, self.bordery+RADIUS)
+        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+1, self.bordery+1)
+        self.colored_part = self.canvas.create_rectangle(0, 0, self.borderx / (R * 2 + 1), self.bordery,
+                                                         outline="yellow", fill="yellow")
         add = ttk.Button(text="Dodaj",
                            command=lambda: self.add_click(number_input.get()))
         add.pack(side="right", padx=10)
@@ -90,6 +93,7 @@ class Simulation:
         print("Start clicked")
         if self.running == 0:
             self.running = 1
+            self.canvas.delete(self.colored_part)
 
         elif self.running == 1:
             self.running = 0
@@ -98,6 +102,7 @@ class Simulation:
         print("Reset clicked")
         self.running=0
         self.particles.clear()
+        self.canvas.delete(self.colored_part)
         self.window.destroy()
         self.borderx=WIDTHMAP
         self.bordery=HEIGHTMAP
@@ -132,7 +137,10 @@ class Simulation:
         for ball in self.particles:
             ball.change_limits(x, y)
         self.canvas.delete(self.borders)
-        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+RADIUS, self.bordery+RADIUS)
+        self.canvas.delete(self.colored_part)
+        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+1, self.bordery+1)
+        self.colored_part = self.canvas.create_rectangle(0, 0, self.borderx/(R*2+1), self.bordery, outline="yellow", fill="yellow")
+
 
     def add_new_particles(self,number):
         try:
@@ -199,7 +207,7 @@ class Simulation:
     def refresh(self):
         if self.running==1:
             self.check_collisions()
-        self.canvas.after(100, self.refresh)
+        self.canvas.after(TIME_STEP, self.refresh)
 
     # Tu trzeba napisac kolidowanie
     def have_collided(self, i, j):
@@ -226,8 +234,8 @@ class Simulation:
         ball2.x2 = ball2speed[0]
         ball2.y2 = ball2speed[1]
             #print(ball1speed, ball2speed, (ball1speed+ball2speed)[0] + (ball1speed+ball2speed)[1])
-        self.particles[i].change_color_blue()
-        self.particles[j].change_color_green()
+        self.particles[i].change_color_blue(TIME_STEP)
+        self.particles[j].change_color_green(TIME_STEP)
         print(ball1.x2, ball1.y2)
         print(ball2.x2, ball2.y2)
 

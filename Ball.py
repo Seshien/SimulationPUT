@@ -14,6 +14,7 @@ class Ball2:
         self.y1 = y1
         self.x2 = (random.random() - 0.5) * SPEED
         self.y2 = (random.random() - 0.5) * SPEED
+        self.mass = 1
         self.limitx = limitx - 2*self.r
         self.limity = limity - 2*self.r
         self.canvas = canvas
@@ -41,14 +42,14 @@ class Ball2:
     def change_color_blue(self, TIME_STEP):
         self.canvas.delete(self.ball)
         self.ball = self.canvas.create_oval(self.x1, self.y1, self.x1+(self.r*2), self.y1+(self.r*2), fill="blue")
-        self.canvas.after(2*TIME_STEP, self.change_color_red)
+        self.canvas.after(200, self.change_color_red)#edit: 2*TIME_STEP -> 200
         if PRINT:
             print("Blue ball pos before:", self.x1, self.y1)
 
     def change_color_green(self, TIME_STEP):
         self.canvas.delete(self.ball)
         self.ball = self.canvas.create_oval(self.x1, self.y1, self.x1+(self.r*2), self.y1+(self.r*2), fill="green")
-        self.canvas.after(2*TIME_STEP, self.change_color_red)
+        self.canvas.after(200, self.change_color_red)#edit: 2*TIME_STEP -> 200
 
     def change_color_red(self):
         self.canvas.delete(self.ball)

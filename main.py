@@ -4,10 +4,10 @@ from tkinter import Canvas
 from tkinter import messagebox
 from Ball import *
 from Graph import *
-import math
 import random
 import numpy
 import math
+import os
 
 #1 Szerokosc okna
 WIDTH = 800
@@ -23,13 +23,19 @@ RADIUS = 5 #2.5
 #Szybkosc maksymalna czasteczek (ta wartosc / 2)
 SPEED = 5 # 50
 # Krok czasu (W)
-TIME_STEP = 50
+W=100
+TIME_STEP = 1/(2*W) #edit : TIME_STEP = 50
 # Czy mozna rozszerzac
 RESIZABLE = 0
 # Czzy wyswietlac operacje?
 PRINT = 0
+#Zmienna odp. za zapisywanie do excela i html
+SAVE=1
+Name_of_file="Date.csv"
+
 # Zmienna odpowiadajaca za dzielenie na sektory od <-R, R>
 R = 5
+
 
 
 class Simulation:
@@ -39,7 +45,12 @@ class Simulation:
         self.running=0
         self.borderx=200
         self.bordery=200
+        self.states = [0 for i in range(10000)]
+        self.Entropy = 0
+        if SAVE: self.f = open(Name_of_file, "w+")
+        self.j = 0
         self.create_window()
+        if SAVE: self.f.close()
 
     def create_window(self):
         # Tworzy nowe okno klasy Tk
@@ -55,12 +66,12 @@ class Simulation:
         # Umieszcza napis w oknie
         text.pack()
         # Utworzenie miejsca do rysowania
-        self.canvas = Canvas(self.window, width=WIDTHMAP, height=HEIGHTMAP, bg="#4bf2a7")#, borderwidth=2, relief="ridge")
+        self.canvas = Canvas(self.window, width=WIDTHMAP, height=HEIGHTMAP, bg="black")#, borderwidth=2, relief="ridge")
         # Umieszczenia miejsca w oknie
         self.canvas.pack()
-        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+1, self.bordery+1)
+        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+1, self.bordery+1,outline="orange")
         self.colored_part = self.canvas.create_rectangle(0, 0, self.borderx / (R * 2 + 1), self.bordery,
-                                                         outline="yellow", fill="yellow")
+                                                         outline="orange", fill="orange")
         add = ttk.Button(text="Dodaj",
                            command=lambda: self.add_click(number_input.get()))
         add.pack(side="right", padx=10)
@@ -215,7 +226,42 @@ class Simulation:
     def refresh(self):
         if self.running==1:
             self.check_collisions()
-        self.canvas.after(TIME_STEP, self.refresh)
+            self.save()
+        self.canvas.after(50, self.refresh)
+
+    def save(self):
+        if SAVE:
+            self.f.write("Time step: {}\n".format(self.j * TIME_STEP))
+            self.j += 1
+            i = 1
+
+        self.states = [0 for i in range(10000)]
+
+        for p in self.particles:
+            self.entropy(p)
+            if SAVE:
+                self.f.write("Particle {}\t position X,Y:\t ({},{})\t and velocity Vx,Vy:\t ({},{})\n".format(i, int(p.x1), int(p.y1),
+                                                                                              int(p.x2),
+                                                                                              int(p.y2)))
+                i += 1
+
+        if SAVE:
+            self.f.write("States: \n".format(self.states))
+            for i in range(0, 9000, 300):
+                self.f.write("{}\n".format(self.states[i:i + 300]))
+
+        Graph.states = self.states
+        if SAVE: self.f.write("Entropy {}\n\n".format(self.Entropy))
+
+    def entropy(self, p):
+        statex = int((p.x1 / WIDTHMAP - 2 * RADIUS) * 10)
+        statey = int((p.y1 / HEIGHTMAP - 2 * RADIUS) * 10)
+
+        stateVx = int(((p.x2) / (2 * 50)) * 10)
+        stateVy = int(((p.y2) / (2 * 50)) * 10)
+        statexyVxVy = statex + statey * 10 + stateVx * 10 * 10 + stateVy * 10 * 10 * 10
+
+        self.states[statexyVxVy] += 1
 
     # Tu trzeba napisac kolidowanie
     def have_collided(self, i, j):
@@ -253,5 +299,6 @@ class Simulation:
 def main():
     simulation = Simulation()
 
+    if SAVE: os.startfile('Date.csv')
 if __name__ == "__main__":
     main()

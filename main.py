@@ -69,7 +69,7 @@ class Simulation:
         self.canvas = Canvas(self.window, width=WIDTHMAP, height=HEIGHTMAP, bg="black")#, borderwidth=2, relief="ridge")
         # Umieszczenia miejsca w oknie
         self.canvas.pack()
-        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+1, self.bordery+1,outline="orange")
+        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+1, self.bordery+1, outline="orange")
         self.colored_part = self.canvas.create_rectangle(0, 0, self.borderx / (R * 2 + 1), self.bordery,
                                                          outline="orange", fill="orange")
         add = ttk.Button(text="Dodaj",
@@ -154,7 +154,7 @@ class Simulation:
             ball.change_limits(x, y)
         self.canvas.delete(self.borders)
         self.canvas.delete(self.colored_part)
-        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+1, self.bordery+1)
+        self.borders = self.canvas.create_rectangle(0, 0, self.borderx+1, self.bordery+1,outline="orange")
         self.colored_part = self.canvas.create_rectangle(0, 0, self.borderx/(R*2+1), self.bordery, outline="yellow", fill="yellow")
 
 

@@ -30,7 +30,7 @@ RESIZABLE = 0
 # Czzy wyswietlac operacje?
 PRINT = 0
 #Zmienna odp. za zapisywanie do excela i html
-SAVE=1
+SAVE=0
 Name_of_file="Date.csv"
 
 # Zmienna odpowiadajaca za dzielenie na sektory od <-R, R>
@@ -264,10 +264,19 @@ class Simulation:
         # if stateVy ==10:stateVy-=1
         # if stateVx ==10:stateVx-=1
         # if stateVx >= 10 or stateVy>=10 or stateVx <0 or stateVy <0: return
-        stateVx = int(((p.x2) / (2 * 50)) * 10)
-        stateVy = int(((p.y2) / (2 * 50)) * 10)
-        statexyVxVy = statex + statey * 10 + stateVx * 10 * 10 + stateVy * 10 * 10 * 10
-        # print(statex,statey,stateVx,stateVy,statexyVxVy)
+        if abs(p.x2) > SPEED / 2 or abs(p.y2) > SPEED / 2:
+            return
+        if p.x2 == SPEED / 2 or p.y2 == SPEED / 2:
+            stateVx=9
+            stateVy=9
+        if p.x2 == -(SPEED / 2) or p.y2 == -(SPEED/2):
+            stateVx=0
+            stateVy=0
+        else:
+            stateVx = int((p.x2 * 5) / (SPEED / 2) + 5)
+            stateVy = int((p.y2 * 5) / (SPEED / 2) + 5)
+        statexyVxVy = stateVy * 10 * 10 * 10 + stateVx * 10 * 10 + statey * 10 + statex
+        #print(stateVx, stateVy, statexyVxVy)
         self.states[statexyVxVy] += 1
 
     # Tu trzeba napisac kolidowanie

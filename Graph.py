@@ -64,7 +64,7 @@ class Graph:
             self.simulation.Entropy = nominator
 
             self.a.clear()
-            self.a.plot(self.x, self.y, )
+            self.a.plot(self.x, self.y)
             self.a.set_title("Entropy")
             self.a.set_xlabel("tj")
             self.a.set_ylabel("S")

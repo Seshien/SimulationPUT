@@ -23,7 +23,7 @@ RADIUS = 5 #2.5
 #Szybkosc maksymalna czasteczek (ta wartosc / 2)
 SPEED = 5 # 50
 # Krok czasu (W)
-W=100
+W=50
 TIME_STEP = 1/(2*W) #edit : TIME_STEP = 50
 # Czy mozna rozszerzac
 RESIZABLE = 0
@@ -38,8 +38,10 @@ R = 5
 
 
 
+
 class Simulation:
     def __init__(self):
+
         # Lista wszystkich czasteczek
         self.particles = []
         self.running=0
@@ -155,7 +157,7 @@ class Simulation:
         self.canvas.delete(self.borders)
         self.canvas.delete(self.colored_part)
         self.borders = self.canvas.create_rectangle(0, 0, self.borderx+1, self.bordery+1,outline="orange")
-        self.colored_part = self.canvas.create_rectangle(0, 0, self.borderx/(R*2+1), self.bordery, outline="yellow", fill="yellow")
+        self.colored_part = self.canvas.create_rectangle(0, 0, self.borderx/(R*2), self.bordery, outline="yellow", fill="yellow")
 
 
     def add_new_particles(self,number):
@@ -171,18 +173,18 @@ class Simulation:
         #    temp2 = random.randrange(0, self.bordery)
         #    self.particles.append(Ball2(self.canvas, temp1, temp2, self.borderx, self.bordery))
         # Generowanie czasteczek na odpowiednich miejscach
-        sector_width = self.borderx/(R*2+1)
+        sector_width = self.borderx/(R*2)
         sector_height = self.bordery
         if PRINT:
             print("sector_width: ", sector_width)
             print("sector_height: ", sector_height)
         # Ilosc czasteczek w rzedzie
-        if number_of_particles > R*2+1:
-            number_x = math.ceil(number_of_particles/(R*2+1))
+        if number_of_particles > R*2:
+            number_x = math.ceil(number_of_particles/(R*2))
             number_y = math.sqrt(number_x)
             number_x = int(number_x/int(number_y))
             number_y = math.ceil(number_y)
-            number_y *= 11
+            number_y *= 10
         else:
             number_x = 1
             number_y = number_of_particles
@@ -227,7 +229,7 @@ class Simulation:
         if self.running==1:
             self.check_collisions()
             self.save()
-        self.canvas.after(50, self.refresh)
+        self.canvas.after(W, self.refresh)
 
     def save(self):
         if SAVE:
@@ -254,13 +256,18 @@ class Simulation:
         if SAVE: self.f.write("Entropy {}\n\n".format(self.Entropy))
 
     def entropy(self, p):
-        statex = int((p.x1 / WIDTHMAP - 2 * RADIUS) * 10)
-        statey = int((p.y1 / HEIGHTMAP - 2 * RADIUS) * 10)
+        statex = int((p.x1 / (self.borderx - 2 * RADIUS)) * 10)
+        statey = int((p.y1 / (self.bordery - 2 * RADIUS)) * 10)
 
+        # stateVx = int(p.x2*2+SPEED)
+        # stateVy =int(p.y2*2+SPEED)
+        # if stateVy ==10:stateVy-=1
+        # if stateVx ==10:stateVx-=1
+        # if stateVx >= 10 or stateVy>=10 or stateVx <0 or stateVy <0: return
         stateVx = int(((p.x2) / (2 * 50)) * 10)
         stateVy = int(((p.y2) / (2 * 50)) * 10)
         statexyVxVy = statex + statey * 10 + stateVx * 10 * 10 + stateVy * 10 * 10 * 10
-
+        # print(statex,statey,stateVx,stateVy,statexyVxVy)
         self.states[statexyVxVy] += 1
 
     # Tu trzeba napisac kolidowanie
@@ -300,5 +307,6 @@ def main():
     simulation = Simulation()
 
     if SAVE: os.startfile('Date.csv')
+
 if __name__ == "__main__":
     main()

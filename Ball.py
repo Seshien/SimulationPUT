@@ -2,10 +2,7 @@ import tkinter as tk
 import random
 from tkinter import ttk
 from tkinter import Canvas
-
 from main import *
-
-
 
 class Ball2:
     def __init__(self, canvas, x1, y1, limitx, limity):
